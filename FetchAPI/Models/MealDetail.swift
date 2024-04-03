@@ -31,6 +31,8 @@ struct MealDetail: Decodable {
         }
     }
     
+//    Added an identifier that would receive a hashable protocol that would not allow errors
+//    or duplicate information if the property keys match.
     struct Ingredient: Decodable, Hashable {
         let id: Int
         let name: String
