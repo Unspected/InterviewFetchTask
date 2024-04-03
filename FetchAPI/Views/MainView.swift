@@ -1,39 +1,42 @@
-//
-//  MainView.swift
-//  FetchAPI
-//
-//  Created by Pavel Andreev on 4/1/24.
-//
-
 import SwiftUI
 
 struct MainView: View {
     
     @StateObject var viewModel: MainViewModel
+    @State var isSorted: Bool = true
     
-    init(manager: NetworkManager) {
+    init(manager: MealManager) {
         _viewModel = .init(wrappedValue: MainViewModel(manager: manager))
     }
     
     var body: some View {
         NavigationView {
-            VStack {
-                ScrollView {
-                    ForEach(viewModel.meals, id: \.idMeal) { meal in
-                        Text(meal.strMeal)
-                        Text(meal.strMealThumb)
-                    }
+
+            List(viewModel.meals ) { meal in
+                NavigationLink(destination: DessertDetailCell(id: meal.id)) {
+                    DessertCell(name: meal.strMeal, imageURL: meal.strMealThumb)
                 }
             }
-           
+            .toolbar(content: {
+                ToolbarItem(placement: .navigation) {
+                    Button(action: {
+                        isSorted.toggle()
+                        viewModel.meals.sort(by: { isSorted ? $0.strMeal < $1.strMeal : $0.strMeal > $1.strMeal })
+                    },
+                           label: {
+                        Text(isSorted ? "Sort to Z-A" : "Sort to A-Z")
+                    })
+                    
+                }
+            })
         }
-        .onAppear {
-            viewModel.fetchMeals()
+        .task {
+            await viewModel.fetchMeals()
         }
     }
-    
 }
+    
 
 #Preview {
-    MainView(manager: NetworkManager())
+    MainView(manager: MealManager(networkManager: NetworkManager()))
 }

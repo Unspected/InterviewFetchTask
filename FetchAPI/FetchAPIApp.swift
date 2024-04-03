@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct FetchAPIApp: App {
+    
+    private let manager = MealManager(networkManager: NetworkManager())
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainView(manager: manager)
         }
     }
 }

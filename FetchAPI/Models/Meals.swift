@@ -9,12 +9,15 @@ import Foundation
 //},
 //{
 
-struct Meals: Decodable {
-    let meals: [Meal]
-}
-
-struct Meal: Decodable {
+struct Meal: Decodable, Identifiable {
+    let id: String
     let strMeal: String
-    let strMealThumb: String
-    let idMeal: String
+    let strMealThumb: URL?
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "idMeal"
+        case strMeal
+        case strMealThumb
+    }
+    
 }

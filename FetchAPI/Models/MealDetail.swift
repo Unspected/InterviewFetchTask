@@ -1,57 +1,67 @@
-//
-//  MealDetail.swift
-//  FetchAPI
-//
-//  Created by Pavel Andreev on 4/1/24.
-//
-
 import Foundation
 
-struct MealDetail: Decodable {
-    let meals: [MealDetailModel]
-}
 
-struct MealDetailModel: Decodable {
-    let idMeal: String
+struct MealDetail: Decodable {
+    
+    struct CodingKeys: CodingKey {
+        
+        let stringValue: String
+        
+        init?(stringValue: String) {
+            self.stringValue = stringValue
+        }
+        init(rawValue: String) {
+            self.stringValue = rawValue
+        }
+        
+        var intValue: Int?
+        
+        init?(intValue: Int) {
+            return nil
+        }
+        
+        static var strMeal = CodingKeys(rawValue: "strMeal")
+        static var strMealThumb = CodingKeys(rawValue: "strMealThumb")
+        static var strInstructions = CodingKeys(rawValue: "strInstructions")
+        
+        static func strIngredient(_ index: Int) -> Self {
+            CodingKeys(rawValue: "strIngredient\(index)")
+        }
+        
+        static func strMeasure(_ index: Int) -> Self {
+            CodingKeys(rawValue: "strMeasure\(index)")
+        }
+    }
+    
+    struct Ingredient: Decodable {
+        let name: String
+        let measure: String
+    }
+    
+  //  let idMeal: String
+    let strMeal: String
+    let strMealThumb: URL?
     let strInstructions: String
-    let strIngredient1: String
-    let strIngredient2: String
-    let strIngredient3: String
-    let strIngredient4: String
-    let strIngredient5: String
-    let strIngredient6: String
-    let strIngredient7: String
-    let strIngredient8: String
-    let strIngredient9: String
-    let strIngredient10: String
-    let strIngredient11: String
-    let strIngredient12: String
-    let strIngredient13: String
-    let strIngredient14: String
-    let strIngredient15: String
-    let strIngredient16: String
-    let strIngredient17: String
-    let strIngredient18: String
-    let strIngredient19: String
-    let strIngredient20: String
-    let strMeasure1: String
-    let strMeasure2: String
-    let strMeasure3: String
-    let strMeasure4: String
-    let strMeasure5: String
-    let strMeasure6: String
-    let strMeasure7: String
-    let strMeasure8: String
-    let strMeasure9: String
-    let strMeasure10: String
-    let strMeasure11: String
-    let strMeasure12: String
-    let strMeasure13: String
-    let strMeasure14: String
-    let strMeasure15: String
-    let strMeasure16: String
-    let strMeasure17: String
-    let strMeasure18: String
-    let strMeasure19: String
-    let strMeasure20: String
+    let ingredients: [Ingredient]
+    
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.strMeal = try container.decode(String.self, forKey: .strMeal)
+        self.strMealThumb = try? container.decode(URL.self, forKey: .strMealThumb)
+        self.strInstructions = try container.decode(String.self, forKey: .strInstructions)
+        
+        var ingredients: [Ingredient] = []
+        
+        for index in 1...20 {
+            if let name = try? container.decode(String.self, forKey: .strIngredient(index)),
+               let measure = try? container.decode(String.self, forKey: .strMeasure(index)),
+               !name.isEmpty, !measure.isEmpty
+            {
+                
+                ingredients.append(Ingredient(name: name, measure: measure))
+            }
+        }
+        self.ingredients = ingredients
+    }
+    
 }
