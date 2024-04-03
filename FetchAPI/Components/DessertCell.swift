@@ -12,12 +12,17 @@ struct DessertCell: View {
     
     var body: some View {
         HStack(spacing: 16) {
+        // Add extra statment for handled all canceled loading because
+        // List has a bug
+        // https://forums.developer.apple.com/forums/thread/682498
+        // https://stackoverflow.com/questions/73179886/asyncimage-not-rendering-all-images-in-a-list-and-producing-error-code-999-ca
+     
+            
             if isOnScreen {
                 AsyncImage(url: imageURL) { image in
                     image.resizable()
                         .aspectRatio(1, contentMode: .fit)
                         .cornerRadius(15.0)
-                    
                 } placeholder: {
                     ProgressView()
                 }

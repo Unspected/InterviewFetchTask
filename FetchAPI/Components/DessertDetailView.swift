@@ -5,10 +5,18 @@ struct IngredientMeassuremnt {
     let measurement: String
 }
 
-struct DessertDetailCell: View {
+struct DessertDetailView: View {
     
-    @StateObject var model = DessertDetailViewModel(manager: MealManager(networkManager: NetworkManager()))
+    
+    @StateObject var model: DessertDetailViewModel
     let id: String
+    
+    init(id: String, manager: MealManager) {
+        self.id = id
+        _model = .init(wrappedValue: DessertDetailViewModel(manager: manager))
+    }
+    
+    
     
     var body: some View {
         
@@ -44,7 +52,7 @@ struct DessertDetailCell: View {
                 
                 Text(meal.strInstructions)
                     .font(.body)
-                ForEach(meal.ingredients, id: \.name) { ingredient in
+                ForEach(meal.ingredients, id: \.id) { ingredient in
                     HStack(spacing: 16) {
                         Text(ingredient.name)
                             .font(.caption)
@@ -60,4 +68,6 @@ struct DessertDetailCell: View {
     }
 }
 
-
+#Preview {
+    DessertDetailView(id: "1", manager: DI.Preview.mealManager)
+}

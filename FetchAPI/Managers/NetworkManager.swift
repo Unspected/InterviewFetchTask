@@ -15,7 +15,6 @@ enum APIEndPoint {
 }
 
 protocol NetworkProtocol {
-    
     func fetch<T>(_ url: URL) async throws -> T where T : Decodable
     func fetch<T>(_ endPoint: APIEndPoint) async throws -> T where T : Decodable
 }
@@ -32,13 +31,14 @@ final class NetworkManager: NetworkProtocol {
     
     private let decoder = JSONDecoder()
     
+    // Initializer allowing for dependency injection of a URLSession, defaults to the shared session.
     init(urlSession: URLSession = .shared) {
         self.urlSession = urlSession
     }
     
     func fetch<T>(_ url: URL) async throws -> T where T : Decodable {
-        // Use the async variant of URLSession to fetch data
-            // Code might suspend here
+        
+        // Perform the URL session data task asynchronously, suspending until completion.
         let (data, _) = try await urlSession.data(from: url)
 
         // Parse the JSON data
@@ -48,22 +48,3 @@ final class NetworkManager: NetworkProtocol {
     }
 }
 
-
-final class MealManager {
-    
-    private let networkManager: NetworkProtocol
-    
-    init(networkManager: NetworkProtocol) {
-        self.networkManager = networkManager
-    }
-    
-    func fetchMeals() async throws -> [Meal] {
-        let response: MealsResponse<[Meal]> = try await networkManager.fetch(.list)
-        return response.meals
-    }
-    
-    func fetchMealDetail(id: Meal.ID) async throws -> MealDetail? {
-        let response: MealsResponse<[MealDetail]> = try await networkManager.fetch(.detail(id: id))
-        return response.meals.first
-    }
-}

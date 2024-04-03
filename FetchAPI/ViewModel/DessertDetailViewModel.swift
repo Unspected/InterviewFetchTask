@@ -3,6 +3,7 @@ import Foundation
 @MainActor
 final class DessertDetailViewModel: ObservableObject {
     
+    // Public
     enum ViewModelError: LocalizedError {
         case mealNotFound
         
@@ -29,6 +30,8 @@ final class DessertDetailViewModel: ObservableObject {
     }
     
     @Published var state: ViewState = .initial
+    
+    // Private
     private let manager: MealManager
     
     init(manager: MealManager) {

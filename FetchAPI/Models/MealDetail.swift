@@ -1,10 +1,8 @@
 import Foundation
 
-
 struct MealDetail: Decodable {
     
     struct CodingKeys: CodingKey {
-        
         let stringValue: String
         
         init?(stringValue: String) {
@@ -33,7 +31,8 @@ struct MealDetail: Decodable {
         }
     }
     
-    struct Ingredient: Decodable {
+    struct Ingredient: Decodable, Hashable {
+        let id: Int
         let name: String
         let measure: String
     }
@@ -44,12 +43,19 @@ struct MealDetail: Decodable {
     let strInstructions: String
     let ingredients: [Ingredient]
     
+    // Custom initializer from Decoder to manually decode the MealDetail properties from JSON.
     init(from decoder: any Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        // Decoding the properties using the custom coding keys.
         self.strMeal = try container.decode(String.self, forKey: .strMeal)
         self.strMealThumb = try? container.decode(URL.self, forKey: .strMealThumb)
         self.strInstructions = try container.decode(String.self, forKey: .strInstructions)
         
+        // Decoding ingredients by dynamically checking for ingredient names and measures, adding them if they exist and are not empty.
+//        since in the details of the dessert model there are 20 repeating properties
+//        that we can combine so as not to write each one through a loop, this is
+//        processed and we will save only those properties that have a value (as written in the task)
         var ingredients: [Ingredient] = []
         
         for index in 1...20 {
@@ -58,7 +64,7 @@ struct MealDetail: Decodable {
                !name.isEmpty, !measure.isEmpty
             {
                 
-                ingredients.append(Ingredient(name: name, measure: measure))
+                ingredients.append(Ingredient(id: index, name: name, measure: measure))
             }
         }
         self.ingredients = ingredients

@@ -9,6 +9,7 @@ import Foundation
 //},
 //{
 
+// Model
 struct Meal: Decodable, Identifiable {
     let id: String
     let strMeal: String
