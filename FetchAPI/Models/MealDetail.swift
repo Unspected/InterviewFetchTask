@@ -18,9 +18,9 @@ struct MealDetail: Decodable {
             return nil
         }
         
-        static var strMeal = CodingKeys(rawValue: "strMeal")
-        static var strMealThumb = CodingKeys(rawValue: "strMealThumb")
-        static var strInstructions = CodingKeys(rawValue: "strInstructions")
+        static var name = CodingKeys(rawValue: "strMeal")
+        static var thumb = CodingKeys(rawValue: "strMealThumb")
+        static var instructions = CodingKeys(rawValue: "strInstructions")
         
         static func strIngredient(_ index: Int) -> Self {
             CodingKeys(rawValue: "strIngredient\(index)")
@@ -40,9 +40,9 @@ struct MealDetail: Decodable {
     }
     
   //  let idMeal: String
-    let strMeal: String
-    let strMealThumb: URL?
-    let strInstructions: String
+    let name: String
+    let thumb: URL?
+    let instructions: String
     let ingredients: [Ingredient]
     
     // Custom initializer from Decoder to manually decode the MealDetail properties from JSON.
@@ -50,9 +50,9 @@ struct MealDetail: Decodable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         // Decoding the properties using the custom coding keys.
-        self.strMeal = try container.decode(String.self, forKey: .strMeal)
-        self.strMealThumb = try? container.decode(URL.self, forKey: .strMealThumb)
-        self.strInstructions = try container.decode(String.self, forKey: .strInstructions)
+        self.name = try container.decode(String.self, forKey: .name)
+        self.thumb = try? container.decode(URL.self, forKey: .thumb)
+        self.instructions = try container.decode(String.self, forKey: .instructions)
         
         // Decoding ingredients by dynamically checking for ingredient names and measures, adding them if they exist and are not empty.
 //        since in the details of the dessert model there are 20 repeating properties

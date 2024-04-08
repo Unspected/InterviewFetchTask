@@ -12,13 +12,13 @@ import Foundation
 // Model
 struct Meal: Decodable, Identifiable {
     let id: String
-    let strMeal: String
-    let strMealThumb: URL?
+    let name: String
+    let thumb: URL?
     
     enum CodingKeys: String, CodingKey {
         case id = "idMeal"
-        case strMeal
-        case strMealThumb
+        case name = "strMeal"
+        case thumb = "strMealThumb"
     }
     
 }

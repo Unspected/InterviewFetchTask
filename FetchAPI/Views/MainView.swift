@@ -4,7 +4,7 @@ struct MainView: View {
     
     @StateObject var viewModel: MainViewModel
     @Environment(\.colorScheme) var colorScheme
-    @State var isSorted: Bool = true
+   
     
     init(manager: MealManager) {
         _viewModel = .init(wrappedValue: MainViewModel(manager: manager))
@@ -15,20 +15,20 @@ struct MainView: View {
 
             List(viewModel.meals ) { meal in
                 NavigationLink(destination: DessertDetailView(id: meal.id, manager: DI.mealManager)) {
-                    DessertCell(name: meal.strMeal, imageURL: meal.strMealThumb)
+                    DessertCell(name: meal.name, imageURL: meal.thumb)
                 }
             }
+            .id(viewModel.isSorted)
             .toolbar(content: {
                 ToolbarItem(placement: .navigation) {
                     Button(action: {
-                        isSorted.toggle()
-                        viewModel.meals.sort(by: { isSorted ? $0.strMeal < $1.strMeal : $0.strMeal > $1.strMeal })
+                        viewModel.isSorted.toggle()
                     },
                            label: {
-                        Text(isSorted ? "Sort to Z-A" : "Sort to A-Z")
+                        Text(viewModel.isSorted ? "Sort to Z-A" : "Sort to A-Z")
                             .font(.headline)
                             .foregroundStyle( colorScheme == .dark ? .white : .black)
-                        Image(systemName: isSorted ? "arrow.down.square" : "arrow.up.square")
+                        Image(systemName: viewModel.isSorted ? "arrow.down.square" : "arrow.up.square")
                             .foregroundStyle( colorScheme == .dark ? .white : .black)
                     })
                     

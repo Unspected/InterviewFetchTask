@@ -37,10 +37,8 @@ final class NetworkManager: NetworkProtocol {
     }
     
     func fetch<T>(_ url: URL) async throws -> T where T : Decodable {
-        
         // Perform the URL session data task asynchronously, suspending until completion.
         let (data, _) = try await urlSession.data(from: url)
-
         // Parse the JSON data
         let result = try decoder.decode(T.self, from: data)
         return result

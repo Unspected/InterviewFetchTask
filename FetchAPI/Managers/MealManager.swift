@@ -1,6 +1,12 @@
 import Foundation
 
-final class MealManager {
+protocol MealProtocol {
+    func fetchMeals() async throws -> [Meal]
+    func fetchMealDetail(id: Meal.ID) async throws -> MealDetail?
+    
+}
+
+final class MealManager: MealProtocol {
     
     private let networkManager: NetworkProtocol
     

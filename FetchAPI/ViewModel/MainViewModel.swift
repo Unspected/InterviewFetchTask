@@ -1,19 +1,21 @@
 import Foundation
 import Combine
 
-protocol GetMealsProtocol {
-    func fetchMeals() async
-}
-
 @MainActor
-class MainViewModel: ObservableObject, GetMealsProtocol {
+class MainViewModel: ObservableObject {
     
     // Public
     @Published var meals: [Meal] = []
+    @Published var isSorted: Bool = false {
+        didSet {
+            toggleSorting()
+        }
+    }
     
     // Private
     private let manager: MealManager
     private var errorMessage: String = ""
+    
     
     init(manager: MealManager) {
         self.manager = manager
@@ -28,5 +30,9 @@ class MainViewModel: ObservableObject, GetMealsProtocol {
         } catch {
             self.errorMessage = error.localizedDescription
         }
+    }
+    
+    private func toggleSorting() {
+        meals.sort(by: { isSorted ? $0.strMeal < $1.strMeal : $0.strMeal > $1.strMeal })
     }
 }
