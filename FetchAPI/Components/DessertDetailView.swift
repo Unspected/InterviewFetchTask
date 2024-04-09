@@ -7,7 +7,6 @@ struct IngredientMeassuremnt {
 
 struct DessertDetailView: View {
     
-    
     @StateObject var model: DessertDetailViewModel
     let id: String
     
@@ -15,8 +14,6 @@ struct DessertDetailView: View {
         self.id = id
         _model = .init(wrappedValue: DessertDetailViewModel(manager: manager))
     }
-    
-    
     
     var body: some View {
         
@@ -41,7 +38,7 @@ struct DessertDetailView: View {
     private func MealDetailView(_ meal: MealDetail) -> some View {
         ScrollView {
             VStack(spacing: 24) {
-                AsyncImage(url: meal.strMealThumb) { image in
+                AsyncImage(url: meal.thumb) { image in
                     image.resizable()
                         .aspectRatio(1, contentMode: .fit)
                         .cornerRadius(15.0)
@@ -50,7 +47,7 @@ struct DessertDetailView: View {
                     ProgressView()
                 }
                 
-                Text(meal.strInstructions)
+                Text(meal.instructions)
                     .font(.body)
                 ForEach(meal.ingredients, id: \.id) { ingredient in
                     HStack(spacing: 16) {
@@ -62,7 +59,7 @@ struct DessertDetailView: View {
                     }
                 }
             }
-            .navigationTitle(meal.strMeal)
+            .navigationTitle(meal.name)
             .padding()
         }
     }

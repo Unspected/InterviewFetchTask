@@ -33,6 +33,6 @@ class MainViewModel: ObservableObject {
     }
     
     private func toggleSorting() {
-        meals.sort(by: { isSorted ? $0.strMeal < $1.strMeal : $0.strMeal > $1.strMeal })
+        meals.sort(by: { isSorted ? $0.name < $1.name : $0.name > $1.name })
     }
 }
